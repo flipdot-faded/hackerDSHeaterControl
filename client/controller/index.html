@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <style>
+
+      body {
+        font-family: Helvetica;
+      }
+
+      #curTargetTemp {
+        font-size: 10em;
+        text-align: center;
+      }
+
+      #controls {
+        margin-top: 50px;
+      }
+
+      .ctlBtnDiv {
+        text-align: center;
+        margin: 0 auto;
+        border: none;
+      }
+
+      button {
+        width: 40%;
+        font-size: 6em;
+      }
+
+      .ctlBtn {
+        border-radius: 5px;
+      }
+
+      #btnInc {
+        background: #ab0000;
+        border: solid #ab0000;
+      }
+
+      #btnDec {
+        background: #0069ab;
+        border: solid #005d98;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <h1>flipdot heater control</h1>
+
+    <div id="controls">
+      <div class="ctlBtnDiv">
+        <button onclick="incTemp()" class="ctlBtn" id="btnInc">+</button>
+      </div>
+
+      <div id="curTargetTemp">Loading ...</div>
+      <div class="ctlBtnDiv">
+        <button onclick="decTemp()" class="ctlBtn" id="btnDec">-</button>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="/hackerDS/js"></script>
+    <script type="text/javascript" src="js/heater.js"></script>
+
+    <script>
+
+      function setOrangeLightState(state) {
+        hackerDS.server.send('orangeLightState', state.toString())
+      }
+
+    </script>
+
+  </body>
+</html>
