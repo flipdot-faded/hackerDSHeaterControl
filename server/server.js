@@ -7,6 +7,17 @@ module.exports = function(hackerDS) {
     console.log('init heater control');
   }
 
+  var intervalHandle = null;
+  function resetInterval(){
+    if(intervalHandle){
+      clearInterval(intervalHandle);
+    }
+
+    intervalHandle = setInterval(function(){
+      updateTemp();
+    }, 1000 * 30);
+  }
+
   function updateTemp() {
     var actTemp, targetTemp;
 
@@ -49,6 +60,7 @@ module.exports = function(hackerDS) {
   }
 
   hackerDS.on('setTargetTemp', function(newTemp){
+    resetInterval();
     request.get('http://hutschienenpi:8080/CanBus/theemin/SetTargetTemp?temp='+newTemp, function(err){
       if(err) console.log(err);
     });
@@ -58,7 +70,5 @@ module.exports = function(hackerDS) {
     updateTemp();
   })
 
-  setInterval(function(){
-    updateTemp();
-  }, 2500);
+  resetInterval();
 }
