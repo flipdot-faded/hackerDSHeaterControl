@@ -24,6 +24,11 @@ function init() {
     state.temps = updatedTemps;
     updateUi();
   })
+
+  hackerDS.on('serverError', function(err){
+    var curTargetTemp = document.getElementById('curTargetTemp');
+    curTargetTemp.innerHTML = 'Server Error :(';
+  })
 }
 
 function sendTemp() {

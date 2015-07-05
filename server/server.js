@@ -13,11 +13,13 @@ module.exports = function(hackerDS) {
     request('http://hutschienenpi:8080/CanBus/theemin/GetActTemp', function(err, res, body){
       if(err) {
         console.log(err);
+        hackerDS.controller.send('serverError');
         return;
       }
 
       if(res.statusCode != 200) {
         console.log(body);
+        hackerDS.controller.send('serverError');
         return;
       }
 
@@ -25,11 +27,13 @@ module.exports = function(hackerDS) {
       request('http://hutschienenpi:8080/CanBus/theemin/GetTargetTemp', function(err, res, body){
         if(err) {
           console.log(err);
+          hackerDS.controller.send('serverError');
           return;
         }
 
         if(res.statusCode != 200) {
           console.log(body);
+          hackerDS.controller.send('serverError');
           return;
         }
 
@@ -45,7 +49,7 @@ module.exports = function(hackerDS) {
   }
 
   hackerDS.on('setTargetTemp', function(newTemp){
-    request.post('http://hutschienenpi:8080/CanBus/theemin/SetTargetTemp?temp='+newTemp, function(err){
+    request.get('http://hutschienenpi:8080/CanBus/theemin/SetTargetTemp?temp='+newTemp, function(err){
       if(err) console.log(err);
     });
   })
