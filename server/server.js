@@ -45,7 +45,7 @@ module.exports = function(hackerDS) {
   }
 
   hackerDS.on('setTargetTemp', function(newTemp){
-    request.post('http://hutschienenpi:8080/Hutschiene/Heater/SetTemp?temp='+newTemp, function(err){
+    request.post('http://hutschienenpi:8080/CanBus/theemin/SetTargetTemp?temp='+newTemp, function(err){
       if(err) console.log(err);
     });
   })

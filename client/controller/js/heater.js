@@ -3,14 +3,14 @@ var state = {};
 init();
 
 function incTemp() {
-  state.temp += 1;
+  state.temps.targetTemp = parseInt(state.temps.targetTemp) + 1;
 
   sendTemp();
   updateUi();
 }
 
 function decTemp(){
-  state.temp -= 1;
+  state.temps.targetTemp -= 1;
 
   sendTemp();
   updateUi();
@@ -27,7 +27,7 @@ function init() {
 }
 
 function sendTemp() {
-  hackerDS.server.send('setTemp', state.temp);
+  hackerDS.server.send('setTargetTemp', state.temps.targetTemp);
 }
 
 function updateUi() {
