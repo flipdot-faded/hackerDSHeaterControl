@@ -17,10 +17,11 @@ function decTemp(){
 }
 
 function init() {
-  hackerDS.server.send('getTemp');
+  hackerDS.server.send('sendUpdateTemp');
 
-  hackerDS.on('updateTemp', function(newTemp){
-    state.temp = newTemp;
+  hackerDS.on('updateTemp', function(updatedTemps){
+    updatedTemps = JSON.parse(updatedTemps);
+    state.temps = updatedTemps;
     updateUi();
   })
 }
@@ -31,5 +32,12 @@ function sendTemp() {
 
 function updateUi() {
   var curTargetTemp = document.getElementById('curTargetTemp');
-  curTargetTemp.innerText = state.temp + '°C';
+  var text = '';
+
+  text += state.temps.actTemp;
+  text += ' / ';
+  text += state.temps.targetTemp;
+  text += '°C';
+
+  curTargetTemp.innerText = text;
 }

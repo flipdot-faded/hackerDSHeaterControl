@@ -7,14 +7,10 @@ module.exports = function(hackerDS) {
     console.log('init heater control');
   }
 
-  hackerDS.on('setTemp', function(newTemp){
-    request.post('http://hutschienenpi:8080/Hutschiene/Heater/SetTemp?temp='+newTemp, function(err){
-      if(err) console.log(err);
-    });
-  })
+  function updateTemp() {
+    var actTemp, targetTemp;
 
-  hackerDS.on('getTemp', function(){
-    request('http://hutschienenpi:8080/Hutschiene/Heater/GetTemp', function(err, res, body){
+    request('http://hutschienenpi:8080/CanBus/theemin/GetActTemp', function(err, res, body){
       if(err) {
         console.log(err);
         return;
@@ -25,8 +21,40 @@ module.exports = function(hackerDS) {
         return;
       }
 
-      var temp = body;
-      hackerDS.controller.send('updateTemp', temp);
+      actTemp = body;
+      request('http://hutschienenpi:8080/CanBus/theemin/GetTargetTemp', function(err, res, body){
+        if(err) {
+          console.log(err);
+          return;
+        }
+
+        if(res.statusCode != 200) {
+          console.log(body);
+          return;
+        }
+
+        targetTemp = body;
+
+        var state = {
+          actTemp: actTemp,
+          targetTemp: targetTemp
+        }
+        hackerDS.controller.send('updateTemp', JSON.stringify(state));
+      })
     })
+  }
+
+  hackerDS.on('setTargetTemp', function(newTemp){
+    request.post('http://hutschienenpi:8080/Hutschiene/Heater/SetTemp?temp='+newTemp, function(err){
+      if(err) console.log(err);
+    });
   })
+
+  hackerDS.on('sendUpdateTemp', function(){
+    updateTemp();
+  })
+
+  setInterval(function(){
+    updateTemp();
+  }, 2500);
 }
